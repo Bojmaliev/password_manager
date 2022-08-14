@@ -35,4 +35,9 @@ class LoginCredentialLocalData implements LocalData<LoginCredential> {
       password: Value(entity.password),
     ));
   }
+
+  @override
+  Future<int> delete(int id) {
+   return _appDb.deleteLoginCredential(id);
+  }
 }

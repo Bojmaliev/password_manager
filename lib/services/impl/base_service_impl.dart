@@ -6,9 +6,8 @@ class BaseServiceImpl<T> implements BaseService<T> {
   final LocalData<T> _localData = getIt<LocalData<T>>();
 
   @override
-  Future<bool> delete(int id) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<int> delete(int id) {
+    return _localData.delete(id);
   }
 
   @override

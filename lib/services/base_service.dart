@@ -7,5 +7,5 @@ abstract class BaseService<T> {
 
   Future<bool> update(T id);
 
-  Future<bool> delete(int id);
+  Future<int> delete(int id);
 }

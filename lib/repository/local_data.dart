@@ -3,4 +3,5 @@ abstract class LocalData<T> {
   Future<T> getOne(int id);
   Future<int> insert(T entity);
   Future<bool> update(T entity);
+  Future<int> delete(int id);
 }

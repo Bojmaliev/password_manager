@@ -31,6 +31,12 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
     });
   }
 
+  Future<void> _deleteLoginCredential() async {
+    await _loginCredentialService.delete(widget.id);
+    _snackbarService.show('You successfully deleted selected login credential');
+    _navigationService.goBack();
+  }
+
   void _saveToClipboard(String message) {
     Clipboard.setData(ClipboardData(text: message));
     _snackbarService.show('Your clipboard contains new text');
@@ -44,11 +50,16 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                _navigationService
-                    .navigateTo(editLoginCredential, args: {'id': widget.id});
-              },
-              icon: const Icon(Icons.edit))
+            onPressed: () {
+              _navigationService
+                  .navigateTo(editLoginCredential, args: {'id': widget.id});
+            },
+            icon: const Icon(Icons.edit),
+          ),
+          IconButton(
+            onPressed: _deleteLoginCredential,
+            icon: const Icon(Icons.delete),
+          )
         ],
       ),
       body: FutureBuilder<LoginCredential>(
