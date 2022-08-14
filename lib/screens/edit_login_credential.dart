@@ -3,7 +3,8 @@ import 'package:form_validator/form_validator.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
-import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/impl/snackbar_service.dart';
 
 class EditLoginCredential extends StatefulWidget {
   final int id;
@@ -17,6 +18,7 @@ class EditLoginCredential extends StatefulWidget {
 class _EditLoginCredentialState extends State<EditLoginCredential> {
   final _formKey = GlobalKey<FormState>();
   final NavigationService _navigationService = getIt<NavigationService>();
+  final SnackbarService _snackbarService = getIt<SnackbarService>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -103,6 +105,7 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
         password: _passwordController.text,
       );
       await _loginCredentialService.update(entity);
+      _snackbarService.show("Your login credential was edited");
 
       _navigationService.goBack();
     }

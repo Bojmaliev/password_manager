@@ -3,7 +3,8 @@ import 'package:form_validator/form_validator.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
-import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/impl/snackbar_service.dart';
 
 class AddLoginCredential extends StatefulWidget {
   const AddLoginCredential({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
   final TextEditingController _passwordController = TextEditingController();
   final LoginCredentialService _loginCredentialService =
       getIt<LoginCredentialService>();
+  final SnackbarService _snackbarService = getIt<SnackbarService>();
 
   @override
   void dispose() {
@@ -87,7 +89,7 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
         password: _passwordController.text,
       );
       await _loginCredentialService.insert(entity);
-
+      _snackbarService.show("Your login credential was saved");
       _navigationService.goBack();
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
-import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/utils/router/routes.dart';
 
 import '../models/login_credential.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/impl/snackbar_service.dart';
 import 'package:password_manager/utils/router/route_generator.dart';
 
 import 'di.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: getIt<NavigationService>().navigatorKey,
+      scaffoldMessengerKey: getIt<SnackbarService>().scaffoldMessengerKey,
       title: 'Password Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),

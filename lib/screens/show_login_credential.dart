@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
-import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/utils/router/routes.dart';
 import 'package:password_manager/widgets/loading_screen.dart';
 
