@@ -3,8 +3,10 @@ import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/impl/snackbar_service.dart';
 import 'package:password_manager/utils/router/routes.dart';
 import 'package:password_manager/widgets/loading_screen.dart';
+import 'package:flutter/services.dart';
 
 class ShowLoginCredential extends StatefulWidget {
   final int id;
@@ -19,12 +21,19 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
   final LoginCredentialService _loginCredentialService =
       getIt<LoginCredentialService>();
   final NavigationService _navigationService = getIt<NavigationService>();
+  final SnackbarService _snackbarService = getIt<SnackbarService>();
+
   bool _showPassword = false;
 
   void _toggleShowPassword() {
     setState(() {
       _showPassword = !_showPassword;
     });
+  }
+
+  void _saveToClipboard(String message) {
+    Clipboard.setData(ClipboardData(text: message));
+    _snackbarService.show('Your clipboard contains new text');
   }
 
   @override
@@ -66,21 +75,32 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
                   child: ListTile(
                     title: const Text('Username:'),
                     subtitle: Text(item.username),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () => _saveToClipboard(item.username),
+                    ),
                   ),
                 ),
                 Card(
                   child: ListTile(
-                    title: const Text('Password:'),
-                    subtitle: Text(
-                      _showPassword
-                          ? item.password
-                          : item.password.replaceAll(RegExp('.'), '*'),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.remove_red_eye_outlined),
-                      onPressed: _toggleShowPassword,
-                    ),
-                  ),
+                      title: const Text('Password:'),
+                      subtitle: Text(
+                        _showPassword
+                            ? item.password
+                            : item.password.replaceAll(RegExp('.'), '*'),
+                      ),
+                      trailing: Wrap(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_red_eye_outlined),
+                            onPressed: _toggleShowPassword,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.copy),
+                            onPressed: () => _saveToClipboard(item.password),
+                          )
+                        ],
+                      )),
                 )
               ],
             );
