@@ -15,13 +15,10 @@ class LoginCredentialCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Card(
-        child: Column(
-          children: [
-            Text(item.name),
-            Text(item.username),
-          ],
-        ),
-      ),
+          child: ListTile(
+        title: Text(item.username),
+        subtitle: Text(item.name),
+      )),
       onTap: () {
         _navigationService
             .navigateTo(showLoginCredential, args: {'id': item.id});
