@@ -19,6 +19,13 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
   final LoginCredentialService _loginCredentialService =
       getIt<LoginCredentialService>();
   final NavigationService _navigationService = getIt<NavigationService>();
+  bool _showPassword = false;
+
+  void _toggleShowPassword() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +56,32 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
           if (item != null) {
             return Column(
               children: [
-                Text(item.name),
-                Text(item.username),
-                Text(item.password),
+                Card(
+                  child: ListTile(
+                    title: const Text('Name:'),
+                    subtitle: Text(item.name),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: const Text('Username:'),
+                    subtitle: Text(item.username),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    title: const Text('Password:'),
+                    subtitle: Text(
+                      _showPassword
+                          ? item.password
+                          : item.password.replaceAll(RegExp('.'), '*'),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.remove_red_eye_outlined),
+                      onPressed: _toggleShowPassword,
+                    ),
+                  ),
+                )
               ],
             );
           }
