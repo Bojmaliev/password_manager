@@ -31,6 +31,11 @@ class _HomeState extends State<Home> {
       body: Consumer<LoginCredentialProvider>(
         builder: (_, instance, child) {
           final List<LoginCredential> list = instance.loginCredentialListFuture;
+          if (list.isEmpty) {
+            return const Center(
+                child: Text("You don't have any login credentials saved yet!")
+            );
+          }
           return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, index) {
@@ -39,28 +44,6 @@ class _HomeState extends State<Home> {
           );
         },
       ),
-      // body: FutureBuilder<List<LoginCredential>>(
-      //   future: _loginCredentialsService.getAll(),
-      //   builder: (context, snapshot) {
-      //     final List<LoginCredential>? list = snapshot.data;
-      //     if (snapshot.connectionState != ConnectionState.done) {
-      //       return const LoadingScreen();
-      //     }
-      //     if (snapshot.hasError) {
-      //       return Center(child: Text(snapshot.error.toString()));
-      //     }
-      //
-      //     if (list != null) {
-      //       return ListView.builder(
-      //         itemCount: list.length,
-      //         itemBuilder: (context, index) {
-      //           return LoginCredentialCard(item: list[index]);
-      //         },
-      //       );
-      //     }
-      //     return const Text('No items found');
-      //   },
-      // ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {

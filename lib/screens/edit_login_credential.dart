@@ -23,8 +23,6 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final LoginCredentialService _loginCredentialService =
-      getIt<LoginCredentialService>();
   final LoginCredentialProvider _loginCredentialProvider =
       getIt<LoginCredentialProvider>();
 
@@ -42,8 +40,9 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
   }
 
   Future<void> loadData() async {
-    LoginCredential credential =
-        await _loginCredentialService.getOne(widget.id);
+    _loginCredentialProvider.getLoginCredential(widget.id);
+    LoginCredential? credential = _loginCredentialProvider.loginCredential;
+    if (credential == null) return;
     _nameController.text = credential.name;
     _usernameController.text = credential.username;
     _passwordController.text = credential.password;

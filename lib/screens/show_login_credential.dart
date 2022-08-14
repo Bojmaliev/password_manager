@@ -6,8 +6,8 @@ import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/services/impl/snackbar_service.dart';
 import 'package:password_manager/utils/router/routes.dart';
-import 'package:password_manager/widgets/loading_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class ShowLoginCredential extends StatefulWidget {
   final int id;
@@ -19,8 +19,6 @@ class ShowLoginCredential extends StatefulWidget {
 }
 
 class _ShowLoginCredentialState extends State<ShowLoginCredential> {
-  final LoginCredentialService _loginCredentialService =
-      getIt<LoginCredentialService>();
   final NavigationService _navigationService = getIt<NavigationService>();
   final SnackbarService _snackbarService = getIt<SnackbarService>();
   final LoginCredentialProvider _loginCredentialProvider =
@@ -45,6 +43,12 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loginCredentialProvider.getLoginCredential(widget.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -64,61 +68,56 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
           )
         ],
       ),
-      body: FutureBuilder<LoginCredential>(
-        future: _loginCredentialService.getOne(widget.id),
-        builder: (context, snapshot) {
-          final LoginCredential? item = snapshot.data;
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const LoadingScreen();
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          }
-
-          if (item != null) {
-            return Column(
-              children: [
-                Card(
-                  child: ListTile(
-                    title: const Text('Name:'),
-                    subtitle: Text(item.name),
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: const Text('Username:'),
-                    subtitle: Text(item.username),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.copy),
-                      onPressed: () => _saveToClipboard(item.username),
-                    ),
-                  ),
-                ),
-                Card(
-                  child: ListTile(
-                      title: const Text('Password:'),
-                      subtitle: Text(
-                        _showPassword
-                            ? item.password
-                            : item.password.replaceAll(RegExp('.'), '*'),
-                      ),
-                      trailing: Wrap(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove_red_eye_outlined),
-                            onPressed: _toggleShowPassword,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.copy),
-                            onPressed: () => _saveToClipboard(item.password),
-                          )
-                        ],
-                      )),
-                )
-              ],
+      body: Consumer<LoginCredentialProvider>(
+        builder: (_, instance, child) {
+          final LoginCredential? item = instance.loginCredential;
+          if (item == null) {
+            return const Center(
+              child: Text('Not found'),
             );
           }
-          return const Text('No items found');
+          return Column(
+            children: [
+              Card(
+                child: ListTile(
+                  title: const Text('Name:'),
+                  subtitle: Text(item.name),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text('Username:'),
+                  subtitle: Text(item.username),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.copy),
+                    onPressed: () => _saveToClipboard(item.username),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text('Password:'),
+                  subtitle: Text(
+                    _showPassword
+                        ? item.password
+                        : item.password.replaceAll(RegExp('.'), '*'),
+                  ),
+                  trailing: Wrap(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove_red_eye_outlined),
+                        onPressed: _toggleShowPassword,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () => _saveToClipboard(item.password),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          );
         },
       ),
     );

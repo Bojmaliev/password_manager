@@ -3,7 +3,6 @@ import 'package:form_validator/form_validator.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/providers/login_credential_provider.dart';
-import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/services/impl/snackbar_service.dart';
 

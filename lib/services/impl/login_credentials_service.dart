@@ -7,6 +7,15 @@ class LoginCredentialService extends BaseServiceImpl<LoginCredential> {
   final Encrypt encrypt = getIt<Encrypt>();
 
   @override
+  Future<List<LoginCredential>> getAll() async {
+    var credential = await super.getAll();
+    return credential.map((e) {
+      e.password = encrypt.decrypt(e.password);
+      return e;
+    }).toList();
+  }
+
+  @override
   Future<int> insert(LoginCredential entity) {
     entity.password = encrypt.encrypt(entity.password);
     return super.insert(entity);

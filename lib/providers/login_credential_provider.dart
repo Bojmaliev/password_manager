@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
+import 'package:collection/collection.dart';
 
 class LoginCredentialProvider extends ChangeNotifier {
   final LoginCredentialService _loginCredentialService =
@@ -12,13 +13,18 @@ class LoginCredentialProvider extends ChangeNotifier {
   List<LoginCredential> get loginCredentialListFuture =>
       _loginCredentialListFuture;
 
-  LoginCredential? _loginCredential;
+  int? id;
 
-  LoginCredential? get employeeData => _loginCredential;
+  LoginCredential? get loginCredential =>
+      loginCredentialListFuture.firstWhereOrNull((element) => element.id == id);
 
   Future<void> getLoginCredentialsFuture() async {
     _loginCredentialListFuture = await _loginCredentialService.getAll();
     notifyListeners();
+  }
+
+  Future<void> getLoginCredential(int id) async {
+    this.id = id;
   }
 
   Future<void> insertLoginCredential(LoginCredential entity) async {
