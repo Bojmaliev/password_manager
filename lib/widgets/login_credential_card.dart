@@ -16,8 +16,9 @@ class LoginCredentialCard extends StatelessWidget {
     return GestureDetector(
       child: Card(
           child: ListTile(
-        title: Text(item.username),
-        subtitle: Text(item.name),
+        title: Text(item.name),
+        subtitle: Text(item.username),
+        trailing: const Icon(Icons.keyboard_arrow_right),
       )),
       onTap: () {
         _navigationService
