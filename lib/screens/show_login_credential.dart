@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
+import 'package:password_manager/providers/login_credential_provider.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/services/impl/snackbar_service.dart';
@@ -22,7 +23,8 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
       getIt<LoginCredentialService>();
   final NavigationService _navigationService = getIt<NavigationService>();
   final SnackbarService _snackbarService = getIt<SnackbarService>();
-
+  final LoginCredentialProvider _loginCredentialProvider =
+      getIt<LoginCredentialProvider>();
   bool _showPassword = false;
 
   void _toggleShowPassword() {
@@ -32,7 +34,7 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
   }
 
   Future<void> _deleteLoginCredential() async {
-    await _loginCredentialService.delete(widget.id);
+    await _loginCredentialProvider.deleteLoginCredential(widget.id);
     _snackbarService.show('You successfully deleted selected login credential');
     _navigationService.goBack();
   }

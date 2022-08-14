@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
+import 'package:password_manager/providers/login_credential_provider.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/services/impl/snackbar_service.dart';
@@ -24,6 +25,8 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
   final TextEditingController _passwordController = TextEditingController();
   final LoginCredentialService _loginCredentialService =
       getIt<LoginCredentialService>();
+  final LoginCredentialProvider _loginCredentialProvider =
+      getIt<LoginCredentialProvider>();
 
   @override
   void dispose() {
@@ -54,7 +57,7 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: _addLoginCredential, icon: const Icon(Icons.save))
+              onPressed: _editLoginCredential, icon: const Icon(Icons.save))
         ],
       ),
       body: Padding(
@@ -94,7 +97,7 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
     );
   }
 
-  Future<void> _addLoginCredential() async {
+  Future<void> _editLoginCredential() async {
     final isValid = _formKey.currentState?.validate();
 
     if (isValid != null && isValid) {
@@ -104,9 +107,8 @@ class _EditLoginCredentialState extends State<EditLoginCredential> {
         username: _usernameController.text,
         password: _passwordController.text,
       );
-      await _loginCredentialService.update(entity);
+      await _loginCredentialProvider.updateLoginCredential(entity);
       _snackbarService.show("Your login credential was edited");
-
       _navigationService.goBack();
     }
   }

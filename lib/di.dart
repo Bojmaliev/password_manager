@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:password_manager/providers/login_credential_provider.dart';
 import 'package:password_manager/services/encrypt.dart';
 import 'package:password_manager/database/db/app_db.dart';
 import 'package:password_manager/repository/local_data.dart';
@@ -20,6 +21,9 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<LoginCredentialService>(
       () => LoginCredentialService());
+
+  getIt.registerLazySingleton<LoginCredentialProvider>(
+      () => LoginCredentialProvider());
 
   const String password = "ASDFGHJKLASDFGHJ";
   getIt.registerFactory<Encrypt>(() => EncryptImpl(password));

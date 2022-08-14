@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
+import 'package:password_manager/providers/login_credential_provider.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
 import 'package:password_manager/services/impl/snackbar_service.dart';
@@ -19,8 +20,8 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final LoginCredentialService _loginCredentialService =
-      getIt<LoginCredentialService>();
+  final LoginCredentialProvider _loginCredentialProvider =
+      getIt<LoginCredentialProvider>();
   final SnackbarService _snackbarService = getIt<SnackbarService>();
 
   @override
@@ -88,7 +89,7 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
         username: _usernameController.text,
         password: _passwordController.text,
       );
-      await _loginCredentialService.insert(entity);
+      await _loginCredentialProvider.insertLoginCredential(entity);
       _snackbarService.show("Your login credential was saved");
       _navigationService.goBack();
     }
