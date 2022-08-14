@@ -3,9 +3,9 @@ import 'package:password_manager/database/db/app_db.dart';
 
 class LoginCredential {
   int? id;
-  final String name;
-  final String username;
-  final String password;
+  late String name;
+  late String username;
+  late String password;
 
   LoginCredential(
       {this.id,
