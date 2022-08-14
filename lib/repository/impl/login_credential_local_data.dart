@@ -29,7 +29,7 @@ class LoginCredentialLocalData implements LocalData<LoginCredential> {
   @override
   Future<bool> update(LoginCredential entity) {
     return _appDb.updateLoginCredential(LoginCredentialsCompanion(
-      id: Value(entity.id),
+      id: Value.ofNullable(entity.id),
       name: Value(entity.name),
       username: Value(entity.username),
       password: Value(entity.password),

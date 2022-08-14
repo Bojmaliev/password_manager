@@ -22,9 +22,8 @@ class BaseServiceImpl<T> implements BaseService<T>{
   }
 
   @override
-  Future<T> insert() {
-    // TODO: implement insert
-    throw UnimplementedError();
+  Future<int> insert(T entity) {
+   return _localData.insert(entity);
   }
 
   @override

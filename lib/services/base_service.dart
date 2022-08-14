@@ -3,7 +3,7 @@ abstract class BaseService<T> {
 
   Future<T> getOne(int id);
 
-  Future<T> insert();
+  Future<int> insert(T entity);
 
   Future<T> update(int id);
 
