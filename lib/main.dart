@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/services/navigation_service.dart';
-import 'package:password_manager/utils/router/router.dart';
+import 'package:password_manager/utils/router/route_generator.dart';
 
 import 'di.dart';
 
@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Password Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      initialRoute: MyRouter.initialRoute,
-      onGenerateRoute: MyRouter.generateRoute,
+      initialRoute: RouteGenerator.initialRoute,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
