@@ -5,7 +5,7 @@ abstract class BaseService<T> {
 
   Future<int> insert(T entity);
 
-  Future<T> update(int id);
+  Future<bool> update(T id);
 
   Future<bool> delete(int id);
 }

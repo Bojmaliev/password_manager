@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
+import 'package:password_manager/services/navigation_service.dart';
+import 'package:password_manager/utils/router/routes.dart';
 import 'package:password_manager/widgets/loading_screen.dart';
 
 class ShowLoginCredential extends StatefulWidget {
@@ -16,6 +18,7 @@ class ShowLoginCredential extends StatefulWidget {
 class _ShowLoginCredentialState extends State<ShowLoginCredential> {
   final LoginCredentialService _loginCredentialService =
       getIt<LoginCredentialService>();
+  final NavigationService _navigationService = getIt<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,14 @@ class _ShowLoginCredentialState extends State<ShowLoginCredential> {
       appBar: AppBar(
         title: const Text('Show credential'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _navigationService
+                    .navigateTo(editLoginCredential, args: {'id': widget.id});
+              },
+              icon: const Icon(Icons.edit))
+        ],
       ),
       body: FutureBuilder<LoginCredential>(
         future: _loginCredentialService.getOne(widget.id),

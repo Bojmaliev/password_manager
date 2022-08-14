@@ -5,14 +5,16 @@ import 'package:password_manager/models/login_credential.dart';
 import 'package:password_manager/services/impl/login_credentials_service.dart';
 import 'package:password_manager/services/navigation_service.dart';
 
-class AddLoginCredential extends StatefulWidget {
-  const AddLoginCredential({Key? key}) : super(key: key);
+class EditLoginCredential extends StatefulWidget {
+  final int id;
+
+  const EditLoginCredential({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<AddLoginCredential> createState() => _AddLoginCredentialState();
+  State<EditLoginCredential> createState() => _EditLoginCredentialState();
 }
 
-class _AddLoginCredentialState extends State<AddLoginCredential> {
+class _EditLoginCredentialState extends State<EditLoginCredential> {
   final _formKey = GlobalKey<FormState>();
   final NavigationService _navigationService = getIt<NavigationService>();
   final TextEditingController _nameController = TextEditingController();
@@ -30,10 +32,23 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
   }
 
   @override
+  void initState() {
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    LoginCredential credential =
+        await _loginCredentialService.getOne(widget.id);
+    _nameController.text = credential.name;
+    _usernameController.text = credential.username;
+    _passwordController.text = credential.password;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add credential'),
+        title: const Text('Edit credential'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -82,11 +97,12 @@ class _AddLoginCredentialState extends State<AddLoginCredential> {
 
     if (isValid != null && isValid) {
       final entity = LoginCredential(
+        id: widget.id,
         name: _nameController.text,
         username: _usernameController.text,
         password: _passwordController.text,
       );
-      await _loginCredentialService.insert(entity);
+      await _loginCredentialService.update(entity);
 
       _navigationService.goBack();
     }

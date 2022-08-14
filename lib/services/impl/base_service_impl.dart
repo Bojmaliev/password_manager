@@ -2,9 +2,9 @@ import 'package:password_manager/di.dart';
 import 'package:password_manager/services/base_service.dart';
 import 'package:password_manager/repository/local_data.dart';
 
-
-class BaseServiceImpl<T> implements BaseService<T>{
+class BaseServiceImpl<T> implements BaseService<T> {
   final LocalData<T> _localData = getIt<LocalData<T>>();
+
   @override
   Future<bool> delete(int id) {
     // TODO: implement delete
@@ -23,13 +23,11 @@ class BaseServiceImpl<T> implements BaseService<T>{
 
   @override
   Future<int> insert(T entity) {
-   return _localData.insert(entity);
+    return _localData.insert(entity);
   }
 
   @override
-  Future<T> update(int id) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(T entity) {
+    return _localData.update(entity);
   }
-
 }
