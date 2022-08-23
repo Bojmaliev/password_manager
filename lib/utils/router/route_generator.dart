@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:password_manager/screens/login_screen.dart';
 import 'package:password_manager/screens/not_found.dart';
 import 'package:password_manager/utils/router/routes.dart';
 import 'package:password_manager/screens/home_screen.dart';
@@ -11,6 +12,8 @@ class RouteGenerator {
     final arguments = (settings.arguments ?? <String, dynamic>{}) as Map;
 
     switch (settings.name) {
+      case loginScreen:
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
       case home:
         return MaterialPageRoute(builder: (_) => const Home());
 
@@ -39,5 +42,5 @@ class RouteGenerator {
     }
   }
 
-  static String initialRoute = home;
+  static String initialRoute = loginScreen;
 }
