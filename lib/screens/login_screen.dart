@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:password_manager/di.dart';
+import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/local_auth_service.dart';
+
+import '../utils/router/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -8,7 +13,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String password = "12312";
+  String password = "";
+  bool registered = false;
+  final LocalAuthService _localAuthService = getIt<LocalAuthService>();
+  final NavigationService _navigationService = getIt<NavigationService>();
+
+  @override
+  void initState() {
+    super.initState();
+    _tryBiometrics();
+    _checkIfRegistered();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +34,24 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Column(
             children: [
-              const Text('Please enter your password:'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List<Text>.generate(
-                  password.length,
-                  (i) => const Text(
-                    "*",
-                    style: TextStyle(fontSize: 40.0),
-                  ),
-                ),
-              ),
+              Text(registered
+                  ? 'Please enter your password:'
+                  : 'Please create your password'),
+              password.isEmpty
+                  ? const Text(
+                      "",
+                      style: TextStyle(fontSize: 40.0),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List<Text>.generate(
+                        password.length,
+                        (i) => const Text(
+                          "*",
+                          style: TextStyle(fontSize: 40.0),
+                        ),
+                      ),
+                    ),
             ],
           ),
           Column(children: [
@@ -47,7 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                OutlinedButton(onPressed: () {}, child: const Text('OK')),
+                OutlinedButton(
+                    onPressed: _handleLoginClick, child: const Text('OK')),
                 OutlinedButton(
                     onPressed: () => _appendToPassword("0"),
                     child: const Text('0')),
@@ -75,5 +98,38 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _login() {}
+  void _tryBiometrics() async {
+    bool authenticated = await _localAuthService
+        .authenticateWithBiometrics("Please authenticate");
+    if (authenticated) {
+      _navigationService.navigateToAndRemove(home);
+    }
+  }
+
+  Future<void> _handleLoginClick() async {
+    if (await _localAuthService.hasPassword()) {
+      _login();
+    } else {
+      _register();
+    }
+  }
+
+  void _login() async {
+    bool authenticated =
+        await _localAuthService.authenticateWithPassword(password);
+    if (authenticated) {
+      _navigationService.navigateToAndRemove(home);
+    }
+  }
+
+  Future<void> _register() async {
+    await _localAuthService.setPassword(password);
+    _navigationService.navigateToAndRemove(home);
+  }
+
+  _checkIfRegistered() async {
+    setState(() async {
+      registered = await _localAuthService.hasPassword();
+    });
+  }
 }
