@@ -1,11 +1,11 @@
-import 'package:password_manager/services/encrypt.dart';
+import 'package:password_manager/services/encrypt_service.dart';
 import 'package:encrypt/encrypt.dart';
 
-class EncryptImpl implements Encrypt {
+class EncryptServiceImpl implements EncryptService {
   late Encrypter encrypter;
   late IV iv;
 
-  EncryptImpl(String password) {
+  EncryptServiceImpl(String password) {
     final key = Key.fromUtf8(password);
     iv = IV.fromLength(16);
     encrypter = Encrypter(AES(key));

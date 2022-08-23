@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:password_manager/providers/login_credential_provider.dart';
-import 'package:password_manager/services/encrypt.dart';
+import 'package:password_manager/services/encrypt_service.dart';
 import 'package:password_manager/database/db/app_db.dart';
 import 'package:password_manager/repository/local_data.dart';
 import 'package:password_manager/models/login_credential.dart';
@@ -26,5 +26,5 @@ Future<void> setupGetIt() async {
       () => LoginCredentialProvider());
 
   const String password = "ASDFGHJKLASDFGHJ";
-  getIt.registerFactory<Encrypt>(() => EncryptImpl(password));
+  getIt.registerFactory<EncryptService>(() => EncryptServiceImpl(password));
 }

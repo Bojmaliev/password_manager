@@ -1,10 +1,10 @@
 import 'package:password_manager/di.dart';
 import 'package:password_manager/models/login_credential.dart';
-import 'package:password_manager/services/encrypt.dart';
+import 'package:password_manager/services/encrypt_service.dart';
 import 'package:password_manager/services/impl/base_service_impl.dart';
 
 class LoginCredentialService extends BaseServiceImpl<LoginCredential> {
-  final Encrypt encrypt = getIt<Encrypt>();
+  final EncryptService encrypt = getIt<EncryptService>();
 
   @override
   Future<List<LoginCredential>> getAll() async {
