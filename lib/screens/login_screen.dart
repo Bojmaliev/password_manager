@@ -36,24 +36,34 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Column(
             children: [
-              Text(registered
-                  ? 'Please enter your password:'
-                  : 'Please create your password'),
-              password.isEmpty
+              registered
                   ? const Text(
-                      "",
-                      style: TextStyle(fontSize: 40.0),
+                      'Please enter your password:',
+                      style: TextStyle(fontSize: 20.0),
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List<Text>.generate(
-                        password.length,
-                        (i) => const Text(
-                          "*",
-                          style: TextStyle(fontSize: 40.0),
+                  : const Text(
+                      'Please create your password',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                child: password.isEmpty
+                    ? const Text(
+                        "",
+                        style: TextStyle(fontSize: 40.0),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List<Text>.generate(
+                          password.length,
+                          (i) => const Text(
+                            "*",
+                            style: TextStyle(fontSize: 40.0),
+                          ),
                         ),
                       ),
-                    ),
+              )
             ],
           ),
           Column(children: [
@@ -63,15 +73,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: List<OutlinedButton>.generate(3, (j) {
                   String value = (3 * i + j + 1).toString();
                   return OutlinedButton(
-                      onPressed: () => _appendToPassword(value),
-                      child: Text(value));
+                    onPressed: () => _appendToPassword(value),
+                    child: Text(value),
+                  );
                 }),
               );
             }),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                OutlinedButton(
+                ElevatedButton(
                     onPressed: _handleLoginClick, child: const Text('OK')),
                 OutlinedButton(
                     onPressed: () => _appendToPassword("0"),
@@ -115,10 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     if (await _localAuthService.hasPassword()) {
       await _login();
-      _snackbarService.show("Your password is correct");
     } else {
       await _register();
-      _snackbarService.show("You successfully created a password");
     }
   }
 
@@ -127,12 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
         await _localAuthService.authenticateWithPassword(password);
     if (authenticated) {
       _navigationService.navigateToAndRemove(home);
+      _snackbarService.show("Your password is correct");
+    } else {
+      _snackbarService.show("Your password is incorrect");
     }
   }
 
   Future<void> _register() async {
     await _localAuthService.setPassword(password);
     _navigationService.navigateToAndRemove(home);
+    _snackbarService.show("You successfully created a password");
   }
 
   void _checkIfRegistered() async {
