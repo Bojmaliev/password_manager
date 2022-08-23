@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/di.dart';
 import 'package:password_manager/services/impl/navigation_service.dart';
+import 'package:password_manager/services/impl/snackbar_service.dart';
 import 'package:password_manager/services/local_auth_service.dart';
 
 import '../utils/router/routes.dart';
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool registered = false;
   final LocalAuthService _localAuthService = getIt<LocalAuthService>();
   final NavigationService _navigationService = getIt<NavigationService>();
+  final SnackbarService _snackbarService = getIt<SnackbarService>();
 
   @override
   void initState() {
@@ -107,14 +109,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLoginClick() async {
+    if (password.length < 4) {
+      _snackbarService.show('Please enter a password with more than 3 digits');
+      return;
+    }
     if (await _localAuthService.hasPassword()) {
-      _login();
+      await _login();
+      _snackbarService.show("Your password is correct");
     } else {
-      _register();
+      await _register();
+      _snackbarService.show("You successfully created a password");
     }
   }
 
-  void _login() async {
+  Future<void> _login() async {
     bool authenticated =
         await _localAuthService.authenticateWithPassword(password);
     if (authenticated) {
@@ -127,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _navigationService.navigateToAndRemove(home);
   }
 
-  _checkIfRegistered() async {
+  void _checkIfRegistered() async {
     setState(() async {
       registered = await _localAuthService.hasPassword();
     });

@@ -12,7 +12,7 @@ class RouteGenerator {
     final arguments = (settings.arguments ?? <String, dynamic>{}) as Map;
 
     switch (settings.name) {
-      case loginScreen:
+      case login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case home:
         return MaterialPageRoute(builder: (_) => const Home());
@@ -42,5 +42,5 @@ class RouteGenerator {
     }
   }
 
-  static String initialRoute = loginScreen;
+  static String initialRoute = login;
 }

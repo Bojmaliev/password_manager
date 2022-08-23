@@ -1,5 +1,5 @@
 const home = "home";
-const loginScreen = "loginScreen";
+const login = "login";
 const addLoginCredential = "addLoginCredential";
 const showLoginCredential = "showLoginCredential";
 const editLoginCredential = "editLoginCredential";

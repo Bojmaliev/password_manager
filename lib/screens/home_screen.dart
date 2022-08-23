@@ -26,6 +26,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Password manager'),
+        actions: [
+          IconButton(
+              onPressed: _logout, icon: const Icon(Icons.login_outlined))
+        ],
         centerTitle: true,
       ),
       body: Consumer<LoginCredentialProvider>(
@@ -51,5 +55,8 @@ class _HomeState extends State<Home> {
         },
       ),
     );
+  }
+  _logout(){
+    navigationService.navigateToAndRemove(login);
   }
 }
